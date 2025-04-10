@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot Collage Maker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>Screenshot Collage Maker</h1>
+
+    <div class="app-container">
+        <div class="controls">
+            <h2>Controls</h2>
+
+            <label for="screenshotInput">Upload Screenshots (for Collage):</label>
+            <input type="file" id="screenshotInput" multiple accept="image/*">
+
+            <hr> <label for="gridConfig">Grid Layout:</label>
+            <select id="gridConfig">
+                <option value="1x1">1x1</option>
+                <option value="1x2">1x2</option>
+                <option value="2x1">2x1</option>
+                <option value="2x2">2x2</option>
+                <option value="1x3">1x3</option>
+                <option value="3x1" selected>3x1</option>
+                <option value="2x3">2x3</option>
+                <option value="3x2">3x2</option>
+            </select>
+
+            <label for="gapSlider">Gap Between Images (px): <span id="gapValue">10</span>px</label>
+            <input type="range" id="gapSlider" min="0" max="50" value="10">
+
+            <label for="shadowSlider">Image Shadow Intensity: <span id="shadowValue">5</span></label>
+            <input type="range" id="shadowSlider" min="0" max="20" value="5">
+
+             <label for="paddingSlider">Outer Padding (px): <span id="paddingValue">20</span>px</label>
+            <input type="range" id="paddingSlider" min="0" max="100" value="20">
+
+             <hr> <h3>Background Settings</h3>
+
+            <label for="backgroundType">Background Type:</label>
+            <select id="backgroundType">
+                 <option value="theme" selected>Theme</option>
+                <option value="solid">Solid Color</option>
+                <option value="gradient">Gradient</option>
+                <option value="image">Upload Image</option>
+            </select>
+
+            <div id="themeControls">
+                <label for="themeSelector">Color Scheme:</label>
+                <select id="themeSelector">
+                    <option value="catppuccin-macchiato" selected>Catppuccin (Macchiato)</option>
+                    <option value="catppuccin-frappe">Catppuccin (Frappe)</option>
+                    <option value="catppuccin-latte">Catppuccin (Latte)</option>
+                    <option value="catppuccin-mocha">Catppuccin (Mocha)</option>
+                    <option value="gruvbox-dark">Gruvbox (Dark)</option>
+                    <option value="gruvbox-light">Gruvbox (Light)</option>
+                    <option value="dracula">Dracula</option>
+                </select>
+            </div>
+
+            <div id="solidColorControls" style="display: none;">
+                <label for="bgColorPicker">Background Color:</label>
+                <input type="color" id="bgColorPicker" value="#333333">
+            </div>
+
+            <div id="gradientControls" style="display: none;">
+                 <!-- <label for="gradientColor1">Gradient Color 1:</label> -->
+                 <input type="color" id="gradientColor1" value="#ea76cb">
+                 <!-- <label for="gradientColor2">Gradient Color 2:</label> -->
+                 <input type="color" id="gradientColor2" value="#04a5e5">
+                 <label for="gradientAngle">Gradient Angle (deg):</label>
+                 <input type="number" id="gradientAngle" value="45" min="0" max="360">
+            </div>
+
+            <div id="imageUploadControls" style="display: none;">
+                 <label for="bgImageInput">Upload Background Image:</label>
+                 <input type="file" id="bgImageInput" accept="image/*">
+                 <span id="bgImageName" class="file-name-display"></span>
+             </div>
+
+
+            <div id="blurControls" style="display: none;">
+                 <label for="blurSlider">Background Blur Amount (px): <span id="blurValue">0</span>px</label>
+                <input type="range" id="blurSlider" min="0" max="30" value="0">
+            </div>
+
+            <hr> <button id="exportButton">Export as PNG</button>
+        </div>
+
+        <div class="preview-area">
+            <h2>Preview</h2>
+            <div id="collageContainer">
+                <div id="backgroundLayer"></div>
+                <div id="imageGrid">
+                    <div class="placeholder">Upload screenshots to see the preview</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
