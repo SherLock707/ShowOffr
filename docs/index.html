@@ -6,6 +6,7 @@
     <title>Screenshot Collage Maker</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <h1>Screenshot Collage Maker</h1>
@@ -30,21 +31,21 @@
             </select>
 
             <label for="gapSlider">Gap Between Images (px): <span id="gapValue">10</span>px</label>
-            <input type="range" id="gapSlider" min="0" max="50" value="10">
+            <input type="range" id="gapSlider" min="0" max="50" value="2">
 
             <label for="shadowSlider">Image Shadow Intensity: <span id="shadowValue">5</span></label>
-            <input type="range" id="shadowSlider" min="0" max="20" value="5">
+            <input type="range" id="shadowSlider" min="0" max="20" value="20">
 
              <label for="paddingSlider">Outer Padding (px): <span id="paddingValue">20</span>px</label>
-            <input type="range" id="paddingSlider" min="0" max="100" value="20">
+            <input type="range" id="paddingSlider" min="0" max="100" value="2">
 
              <hr> <h3>Background Settings</h3>
 
             <label for="backgroundType">Background Type:</label>
             <select id="backgroundType">
-                 <option value="theme" selected>Theme</option>
+                 <option value="theme">Theme</option>
                 <option value="solid">Solid Color</option>
-                <option value="gradient">Gradient</option>
+                <option value="gradient" selected>Gradient</option>
                 <option value="image">Upload Image</option>
             </select>
 
@@ -72,7 +73,7 @@
                  <!-- <label for="gradientColor2">Gradient Color 2:</label> -->
                  <input type="color" id="gradientColor2" value="#04a5e5">
                  <label for="gradientAngle">Gradient Angle (deg):</label>
-                 <input type="number" id="gradientAngle" value="45" min="0" max="360">
+                 <input type="number" id="gradientAngle" value="260" min="0" max="360">
             </div>
 
             <div id="imageUploadControls" style="display: none;">
@@ -84,7 +85,7 @@
 
             <div id="blurControls" style="display: none;">
                  <label for="blurSlider">Background Blur Amount (px): <span id="blurValue">0</span>px</label>
-                <input type="range" id="blurSlider" min="0" max="30" value="0">
+                <input type="range" id="blurSlider" min="0" max="30" value="30">
             </div>
 
             <hr> <button id="exportButton">Export as PNG</button>

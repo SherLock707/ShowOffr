@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // handleFileUpload remains the same as the "perfect" version
     function handleFileUpload(event) {
         console.log("handleFileUpload started");
-        const files = event.target.files;
+        const files = Array.from(event.target.files).sort((a, b) => a.lastModified - b.lastModified);
         if (!files || files.length === 0) return;
         uploadedImages = [];
         imageGrid.innerHTML = '';
@@ -179,30 +179,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // updateGrid uses `auto` rows (from "perfect" version)
     function updateGrid() {
-        console.log("--- updateGrid called ---");
-        imageGrid.innerHTML = ''; // Clear previous content
-        if (uploadedImages.length === 0) {
-             imageGrid.innerHTML = '<div class="placeholder">Upload screenshots to see the preview</div>';
-             imageGrid.style.gridTemplateColumns = '1fr';
-             imageGrid.style.gridTemplateRows = 'auto'; // Still auto for placeholder row
-             return;
+        const imageGrid = document.getElementById('imageGrid');
+        imageGrid.innerHTML = ''; // Clear previous
+    
+        uploadedImages.forEach(image => {
+            const img = document.createElement('img');
+            img.src = image.dataUrl;
+            img.alt = image.name;
+            img.setAttribute('data-filename', image.name);
+            imageGrid.appendChild(img);
+        });
+    
+        // ADD THIS HERE:
+        if (!window.sortableInstance) {
+            window.sortableInstance = new Sortable(document.getElementById('imageGrid'), {
+                animation: 150,
+                onEnd: function (evt) {
+                    const imageGrid = document.getElementById('imageGrid');
+                    const newOrder = Array.from(imageGrid.children).map(child => {
+                        const name = child.getAttribute('data-filename');
+                        return uploadedImages.find(img => img.name === name);
+                    });
+                    uploadedImages = newOrder;
+                    console.log('New image order:', uploadedImages.map(img => img.name));
+                }
+            });
         }
-        const gridValue = gridConfigSelect.value;
-        const [rows, cols] = gridValue.split('x').map(Number);
-        imageGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        imageGrid.style.gridTemplateRows = `repeat(${rows}, auto)`; // Key line for height
-        console.log(`updateGrid: grid-template-rows set to repeat(${rows}, auto)`);
-        const maxImages = rows * cols;
-        for (let i = 0; i < maxImages && i < uploadedImages.length; i++) {
-            const imgElement = document.createElement('img');
-            imgElement.src = uploadedImages[i].dataUrl;
-            imgElement.alt = `Screenshot ${i + 1}`;
-            imgElement.onerror = () => { console.error(`Error loading image ${i+1}`); imgElement.alt = `Error`; }
-            applyShadowStyle(imgElement);
-            imageGrid.appendChild(imgElement);
-        }
-         console.log("--- updateGrid finished ---");
     }
+    
 
 
     // updateGap, updatePadding, updateShadow, applyShadowStyle remain the same
@@ -298,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("--- exportCollage called ---");
         const originalBorder = collageContainer.style.border;
         collageContainer.style.border = 'none';
-        const options = { useCORS: true, allowTaint: true, backgroundColor: null, scale: 2, logging: true };
+        const options = { useCORS: true, allowTaint: true, backgroundColor: null, scale: 5, logging: true };
         console.log("Calling html2canvas...");
         setTimeout(() => { // Delay helps ensure styles are applied
             html2canvas(collageContainer, options).then(canvas => {
